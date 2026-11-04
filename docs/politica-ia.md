@@ -3,7 +3,7 @@
 > Uma página. É o que a TI mostra ao cliente/auditor quando perguntarem se a
 > Combio usa IA (Claude Code, Copilot) com segurança. Preencha os `<campos>`.
 >
-> Versão: `<v1 — AAAA-MM-DD>` · Responsável: `<nome / papel>` · Revisão: `<trimestral>`
+> Versão: `<v1 — 2026-11-04>` · Responsável: `<Cleiton / Develop>` · Revisão: `<trimestral>`
 
 ## 1. Pode (uso incentivado)
 
