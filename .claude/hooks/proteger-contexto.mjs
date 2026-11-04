@@ -31,6 +31,13 @@ const ESCRITA_PROIBIDA = [
   // pega com aspas  (secret: "abc123")  e sem aspas  (DB_PASSWORD=combio@2026)
   { re: /\b(DB_PASSWORD|DATABASE_URL|SENHA|SECRET|TOKEN|API_KEY)\s*[:=]\s*['"]?\S{3,}/i, motivo: 'credencial literal no código' },
   { re: /\b(mysql|postgres(ql)?|mongodb(\+srv)?):\/\/[^:\s/]+:[^@\s]+@/i, motivo: 'connection string com senha' },
+  // chave de acesso AWS (AKIA = longa duração, ASIA = temporária), independe do nome da variável
+  { re: /\b(AKIA|ASIA)[0-9A-Z]{16}\b/, motivo: 'chave de acesso AWS' },
+  // nomes compostos em MAIÚSCULAS (CLIENT_SECRET, DB_TOKEN, AWS_ACCESS_KEY_ID, KEY) com valor literal.
+  // Sem o flag i de propósito: evita falso positivo em tipagem como "key: string".
+  { re: /[A-Z0-9_]*(KEY|SECRET|TOKEN|PASSWORD|PASSWD|SENHA)[A-Z0-9_]*\s*[:=]\s*['"`]?[^\s'"`;,)]{6,}/, motivo: 'credencial literal (nome composto)' },
+  // camelCase/minúsculas com string literal entre aspas (apiKey = '...', clientSecret: '...')
+  { re: /\w*(secret|token|passw(or)?d|senha|api_?key|access_?key|private_?key)\w*\s*[:=]\s*['"`][^'"`\s]{8,}['"`]/i, motivo: 'credencial literal entre aspas' },
 ];
 
 // 3) Comandos que a IA nunca deve EXECUTAR direto.
@@ -73,3 +80,4 @@ if (bloqueio) {
 
 auditar('permitido', `${e.tool_name ?? '?'} ${caminho || comando || ''}`.trim());
 process.exit(0);
+ 
